@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NTT</string>
+    <string name="accessibility_service_label">NTT Instant Screen Reader</string>
+    <string name="accessibility_service_description">Reads text and numbers on screen when you tap NTT to help you understand regional numbers and prices instantly.</string>
+    <string name="tile_label_ntt_mic">NTT Mic</string>
+    <string name="tile_desc_ntt_mic">Tap to speak numbers or regional words</string>
+</resources>
