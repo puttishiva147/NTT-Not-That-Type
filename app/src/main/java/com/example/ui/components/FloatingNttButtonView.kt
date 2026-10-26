@@ -398,6 +398,7 @@ fun FloatingNttOverlayComposeContent(
                                         NttHaptics.performTick(context, haptics)
                                         NttAccessibilityService.instance?.scanAndHighlightScreenRealtime(languageCode)
                                         OverlayStateHolder.scanActiveScreen(languageCode)
+                                        OverlayStateHolder.cycleDetectedResult()
                                     },
                                     modifier = Modifier
                                         .size(36.dp)
