@@ -151,7 +151,7 @@ fun FloatingNttOverlayComposeContent(
     LaunchedEffect(voiceState) {
         if (voiceState is VoiceState.Success) {
             val recognizedText = (voiceState as VoiceState.Success).recognizedText
-            OverlayStateHolder.onRealtimeQueryChanged(recognizedText, languageCode)
+            OverlayStateHolder.showVoiceResult(recognizedText, languageCode)
         }
     }
 
