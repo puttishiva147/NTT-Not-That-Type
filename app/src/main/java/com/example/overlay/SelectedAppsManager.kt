@@ -316,7 +316,7 @@ object SelectedAppsManager {
     fun isIgnoredSystemPackage(pkg: String): Boolean {
         if (pkg.isBlank()) return true
         val lower = pkg.lowercase()
-        if (lower == "android" || lower == "com.android.systemui" || lower == "com.example") return true
+        if (lower == "android" || lower == "com.android.systemui" || lower == "com.example" || lower == "com.aistudio.ntt.qrvxmb") return true
         if (lower.startsWith("com.google.android.gms") ||
             lower.startsWith("com.google.android.gsf") ||
             lower.startsWith("com.google.android.webview") ||
