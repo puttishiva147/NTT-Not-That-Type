@@ -285,6 +285,19 @@ object OverlayStateHolder {
     /**
      * Scans the real active screen via NttAccessibilityService.
      */
+    fun cycleDetectedResult() {
+        val current = _state.value
+        val items = current.detectedItems
+        if (items.isEmpty()) return
+        val nextIndex = (current.selectedItemIndex + 1) % items.size
+        _state.value = current.copy(
+            selectedItemIndex = nextIndex,
+            activeResult = items[nextIndex].understoodResult,
+            currentTypedQuery = "",
+            statusMessage = "Showing next detected number"
+        )
+    }
+
     fun scanActiveScreen(preferredLanguageCode: String = "hi") {
         val service = NttAccessibilityService.instance
         if (service != null) {
