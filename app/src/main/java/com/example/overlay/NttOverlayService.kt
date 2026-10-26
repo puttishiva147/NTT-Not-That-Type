@@ -132,6 +132,7 @@ class NttOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
             WindowManager.LayoutParams.WRAP_CONTENT,
             type,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
                     WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
                     WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
             PixelFormat.TRANSLUCENT
@@ -200,11 +201,21 @@ class NttOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
             }
         }
 
-        overlayComposeView = composeView
         try {
-            windowManager?.addView(overlayComposeView, layoutParams)
+            val wm = windowManager ?: return
+            val params = layoutParams ?: return
+            wm.addView(composeView, params)
+            // Publish the view only after WindowManager successfully attaches it.
+            // A failed attachment must not leave a stale non-null reference that blocks retries.
+            overlayComposeView = composeView
         } catch (e: Exception) {
-            // overlay window permission or context edge cases
+            // Keep the service alive and allow a later setup attempt after transient window errors.
+            try {
+                (composeView.parent as? android.view.ViewGroup)?.removeView(composeView)
+            } catch (_: Exception) {
+                // Best-effort cleanup only.
+            }
+            overlayComposeView = null
         }
 
         // Dynamically adjust visibility and FLAG_NOT_FOCUSABLE
