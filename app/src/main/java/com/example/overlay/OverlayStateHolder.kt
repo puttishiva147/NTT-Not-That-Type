@@ -364,6 +364,31 @@ object OverlayStateHolder {
         )
     }
 
+    /**
+     * Apply final microphone transcription without letting the result disappear
+     * when the background screen scan finishes. Keep the panel open and expose
+     * the spoken text even when it cannot be translated automatically.
+     */
+    fun showVoiceResult(spokenText: String, preferredLanguageCode: String = "hi") {
+        val query = spokenText.trim()
+        if (query.isBlank()) return
+
+        onRealtimeQueryChanged(query, preferredLanguageCode)
+
+        val current = _state.value
+        val fallback = current.activeResult ?: PhoneticMatcher.search(query, preferredLanguageCode)
+            .firstOrNull()?.result
+
+        _state.value = _state.value.copy(
+            isButtonVisible = true,
+            isPanelExpanded = true,
+            currentTypedQuery = query,
+            isTypingActive = false,
+            activeResult = fallback,
+            statusMessage = if (fallback != null) "Voice result ready" else "Heard: $query"
+        )
+    }
+
     fun setTypingFocus(isTyping: Boolean) {
         _state.value = _state.value.copy(isTypingActive = isTyping)
     }
